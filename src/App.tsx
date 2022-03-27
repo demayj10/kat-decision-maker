@@ -17,8 +17,8 @@ const appStyle = {
 }
 
 const paperStyle = {
-  margin: "25em 1em 1em",
-  height: "45vh"
+  margin: "10em 1em 1em",
+  height: "fit-content"
 }
 
 const modalStyle = {
@@ -73,7 +73,7 @@ const App = () => {
         </Toolbar>
       </AppBar>
       <Paper elevation={20} sx={paperStyle}>
-        <Stack spacing={8} padding="2em 1em">
+        <Stack spacing={5} padding="2em 1em">
           <Typography variant='h4'>What's the decision?</Typography>
           <Stack direction="column" spacing={2}>
             <TextField
