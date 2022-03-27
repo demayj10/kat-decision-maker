@@ -2,7 +2,7 @@
   "name": "kat-decision-maker",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://katdecisions.com/",
+  "homepage": "https://demayj10.github.io/kat-decision-maker/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
