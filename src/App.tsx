@@ -47,9 +47,7 @@ const App = () => {
   const [modal, setModal] = useState(false);
 
   const decider = () => {
-    const max = options.length - 1;
-    const min = 1;
-    const decisionValue: number = Math.floor(Math.random() * (max - min + 1)) + min;
+    const decisionValue: number = Math.floor(Math.random() * options.length);
     setDecided(options[decisionValue].value);
     setModal(true);
   }
