@@ -37,6 +37,8 @@ type Option = {
   value: string
 }
 
+const OPTION_LIMIT: number = 5;
+
 const App = () => {
   const [options, setOptions] = useState<Option[]>([
     {id: 1, value: ""}, {id: 2, value: ""}
@@ -110,6 +112,7 @@ const App = () => {
                 variant='contained'
                 color="primary"
                 onClick={() => addAnotherOption()}
+                disabled={OPTION_LIMIT === options.length}
               >
                 I need more options!
               </Button>
