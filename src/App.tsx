@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import { AppBar, Toolbar, Paper, Button, Container, Typography, Stack, TextField, Modal, Box } from '@mui/material';
 
 import image from '../static/images/katAndJohn.jpg';
@@ -32,24 +32,23 @@ const modalStyle = {
   boxShadow: 24
 }
 
+type Option = {
+  id: number,
+  value: string
+}
+
 const App = () => {
-  const [option1, setOption1] = useState<string>("");
-  const [option2, setOption2] = useState<string>("");
+  const [options, setOptions] = useState<Option[]>([
+    {id: 1, value: ""}, {id: 2, value: ""}
+  ]);
   const [decided, setDecided] = useState("");
   const [modal, setModal] = useState(false);
 
-  console.log(option1);
-
   const decider = () => {
-    const max = 2;
+    const max = options.length - 1;
     const min = 1;
-    const decisionValue = Math.floor(Math.random() * (max - min + 1)) + min;
-    console.log(decisionValue);
-    if (decisionValue === 2) {
-      setDecided(option2);
-    } else {
-      setDecided(option1);
-    }
+    const decisionValue: number = Math.floor(Math.random() * (max - min + 1)) + min;
+    setDecided(options[decisionValue].value);
     setModal(true);
   }
 
@@ -59,8 +58,22 @@ const App = () => {
   }
 
   const clearOptions = () => {
-    setOption1("");
-    setOption2("");
+    setOptions([{id: 1, value: ""}, {id: 2, value: ""}]);
+  }
+
+  const addAnotherOption = () => {
+    setOptions([...options, { id: options.length+1, value: ""}]);
+  }
+
+  const handleOptionsChange = (event: ChangeEvent<HTMLInputElement>, id: number): void => {
+    const existingOptions: Option[] = options;
+    const index: number = existingOptions.findIndex((option: Option) => id === option.id);
+    if (index >= 0) {
+      existingOptions[index].value = event.target.value;
+      setOptions([...existingOptions]);
+    } else {
+      throw Error(`Can't find item with id [${id}] in the options`);
+    }
   }
 
   return (
@@ -76,29 +89,34 @@ const App = () => {
         <Stack spacing={5} padding="2em 1em">
           <Typography variant='h4'>What's the decision?</Typography>
           <Stack direction="column" spacing={2}>
-            <TextField
-              variant='outlined'
-              size='small'
-              label="Option 1"
-              value={option1}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOption1(e.target.value)}
-            />
-            <TextField
-            variant='outlined'
-            size='small'
-            label="Option 2"
-            value={option2}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOption2(e.target.value)}
-            />
+            {options.map((option: Option) => {
+              return (
+                <TextField
+                   variant='outlined'
+                   key={`OptionInput${option.id}`}
+                   size='small'
+                   label={`Option ${option.id}`}
+                   value={option.value}
+                   onChange={(e: ChangeEvent<HTMLInputElement>) => handleOptionsChange(e, option.id)}
+                />
+              )
+            })}
           </Stack>
           <Container maxWidth="md">
             <Stack
               spacing={1}
             >
+              <Button
+                variant='contained'
+                color="primary"
+                onClick={() => addAnotherOption()}
+              >
+                I need more options!
+              </Button>
               <Button 
                 variant='contained'
                 color="secondary"
-                disabled={option1 === "" || option2 === ""}
+                disabled={options.length !== options.filter((option: Option) => option.value !== "").length}
                 onClick={() => decider()}
               >
                 Decide For Me!
@@ -109,7 +127,6 @@ const App = () => {
                 Clear
               </Button>
             </Stack>
-            
           </Container>
         </Stack>
       </Paper>
